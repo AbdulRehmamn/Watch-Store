@@ -7,6 +7,7 @@ import * as THREE from 'three';
 import { Link } from 'react-router-dom';
 import { Loader, ShoppingBag } from 'lucide-react';
 import { useCart } from '../hooks/useCart';
+import ErrorBoundary from './ErrorBoundary';
 
 interface Spiral3DScrollProps {
   title: string;
@@ -53,77 +54,73 @@ const Spiral3DScroll = ({ title, products }: Spiral3DScrollProps) => {
         </div>
       </div>
     }>
-    <div 
-      ref={containerRef} 
-      className="relative min-h-[150vh]"
-    >
-      <div className="sticky top-0 h-screen flex flex-col">
-        <motion.h2 
-          className="text-4xl md:text-5xl font-bold mb-8 px-8 pt-8"
-          style={{ 
-            fontFamily: 'Playfair Display, serif',
-            y: titleY,
-            opacity: titleOpacity
-          }}
-        >
-          {title}
-        </motion.h2>
-        
-        <div className="flex-1 relative">
-          {/* 3D Canvas */}
-          <Canvas className="w-full h-full">
-            <PerspectiveCamera makeDefault position={[0, 0, 15]} fov={50} />
-            <ambientLight intensity={0.5} />
-            <directionalLight position={[10, 10, 5]} intensity={1} />
-            <Spiral products={products} scrollYProgress={scrollYProgress} />
-          </Canvas>
+      <div 
+        ref={containerRef} 
+        className="relative min-h-[150vh]"
+      >
+        <div className="sticky top-0 h-screen flex flex-col">
+          <motion.h2 
+            className="text-4xl md:text-5xl font-bold mb-8 px-8 pt-8"
+            style={{ 
+              fontFamily: 'Playfair Display, serif',
+              y: titleY,
+              opacity: titleOpacity
+            }}
+          >
+            {title}
+          </motion.h2>
           
-          {/* Mobile view for special products */}
-          {isMobile && (
-            <div className="absolute inset-0 bg-white/80 backdrop-blur-sm p-4 overflow-y-auto">
-              <h3 className="text-2xl font-bold mb-6 text-center">Featured Watches</h3>
-              <div className="space-y-12">
-                {products
-                  .filter(product => specialProducts.includes(product.name))
-                  .map(product => (
-                    <div key={product.id} className="bg-white rounded-lg shadow-md p-4">
-                      <Link to={`/product/${product.id}`}>
-                        <img 
-                          src={product.image} 
-                          alt={product.name}
-                          className="w-full h-auto object-contain rounded-lg mb-4"
-                        />
-                        <h4 className="text-xl font-medium mb-2">{product.name}</h4>
-                        <p className="text-gray-600 mb-2">{product.description.substring(0, 100)}...</p>
-                        <div className="flex justify-between items-center">
-                          <span className="text-lg font-bold">${product.price.toLocaleString()}</span>
-                          <button 
-                            className="bg-black text-white px-3 py-1 rounded flex items-center gap-1 text-sm"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              addToCart(product);
-                            }}
-                          >
-                            <ShoppingBag size={14} /> Add
-                          </button>
-                        </div>
-                      </Link>
-                    </div>
-                  ))}
+          <div className="flex-1 relative">
+            {/* 3D Canvas */}
+            <Canvas className="w-full h-full">
+              <PerspectiveCamera makeDefault position={[0, 0, 15]} fov={50} />
+              <ambientLight intensity={0.5} />
+              <directionalLight position={[10, 10, 5]} intensity={1} />
+              <Spiral products={products} scrollYProgress={scrollYProgress} />
+            </Canvas>
+            
+            {/* Mobile view for special products */}
+            {isMobile && (
+              <div className="absolute inset-0 bg-white/80 backdrop-blur-sm p-4 overflow-y-auto">
+                <h3 className="text-2xl font-bold mb-6 text-center">Featured Watches</h3>
+                <div className="space-y-12">
+                  {products
+                    .filter(product => specialProducts.includes(product.name))
+                    .map(product => (
+                      <div key={product.id} className="bg-white rounded-lg shadow-md p-4">
+                        <Link to={`/product/${product.id}`}>
+                          <img 
+                            src={product.image} 
+                            alt={product.name}
+                            className="w-full h-auto object-contain rounded-lg mb-4"
+                          />
+                          <h4 className="text-xl font-medium mb-2">{product.name}</h4>
+                          <p className="text-gray-600 mb-2">{product.description.substring(0, 100)}...</p>
+                          <div className="flex justify-between items-center">
+                            <span className="text-lg font-bold">${product.price.toLocaleString()}</span>
+                            <button 
+                              className="bg-black text-white px-3 py-1 rounded flex items-center gap-1 text-sm"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                addToCart(product);
+                              }}
+                            >
+                              <ShoppingBag size={14} /> Add
+                            </button>
+                          </div>
+                        </Link>
+                      </div>
+                    ))}
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
-    </div>
     </ErrorBoundary>
   );
 };
 
-// Add ErrorBoundary import at the top
-import ErrorBoundary from './ErrorBoundary';
-
-// 3D Spiral component within the canvas
 // TextureLoader cache to prevent redundant loading
 const textureCache = new Map<string, THREE.Texture>();
 
@@ -132,7 +129,7 @@ const Spiral = ({ products, scrollYProgress }: { products: Product[], scrollYPro
   const [hovered, setHovered] = useState<number | null>(null);
   const [clicked, setClicked] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
-  const { viewport } = useThree();
+  const { } = useThree(); // Removed unused 'viewport'
   
   // Preload all textures in parallel to speed up rendering
   useEffect(() => {
@@ -166,7 +163,6 @@ const Spiral = ({ products, scrollYProgress }: { products: Product[], scrollYPro
             }
             
             return new Promise<void>(resolve => {
-              // Add a small delay between batches to prevent overwhelming the browser
               setTimeout(() => {
                 loader.load(
                   product.image,
@@ -174,7 +170,6 @@ const Spiral = ({ products, scrollYProgress }: { products: Product[], scrollYPro
                     if (!isMounted) return;
                     texture.minFilter = THREE.LinearFilter;
                     texture.magFilter = THREE.LinearFilter;
-                    // Use sRGBEncoding for better color representation
                     texture.colorSpace = THREE.SRGBColorSpace;
                     textureCache.set(product.image, texture);
                     loadedCount++;
@@ -184,9 +179,8 @@ const Spiral = ({ products, scrollYProgress }: { products: Product[], scrollYPro
                     resolve();
                   },
                   undefined,
-                  (error) => {
-                    console.error(`Error loading texture for ${product.name}:`, error);
-                    // Add placeholder texture on error to prevent blank screens
+                  () => {
+                    console.error(`Error loading texture for ${product.name}`);
                     textureCache.set(product.image, placeholderTexture);
                     loadedCount++;
                     if (loadedCount === products.length && isMounted) {
@@ -195,7 +189,7 @@ const Spiral = ({ products, scrollYProgress }: { products: Product[], scrollYPro
                     resolve();
                   }
                 );
-              }, i * 100); // Small delay between batch starts
+              }, i * 100);
             });
           })
         );
@@ -204,25 +198,22 @@ const Spiral = ({ products, scrollYProgress }: { products: Product[], scrollYPro
     
     loadTextures();
     
-    // Cleanup function to prevent state updates after unmount
     return () => {
       isMounted = false;
     };
   }, [products]);
   
   // Animation for the spiral based on scroll
-  useFrame((state, delta) => {
+  useFrame((state) => {
     if (groupRef.current) {
-      // Get scroll value and apply rotation - smoother rotation
       const scrollValue = scrollYProgress.get();
       const targetRotation = scrollValue * Math.PI * 4;
       groupRef.current.rotation.y = THREE.MathUtils.lerp(
         groupRef.current.rotation.y,
         targetRotation,
-        delta * 2.5
+        0.1
       );
       
-      // Add slight movement - smoother animation
       groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.5;
     }
   });
@@ -297,30 +288,26 @@ const ProductNode = ({
   index
 }: ProductNodeProps) => {
   const meshRef = useRef<THREE.Mesh>(null);
-  const { viewport } = useThree();
+  const { } = useThree(); // Removed unused 'viewport'
+  
+  // Create fallback texture
+  const canvas = document.createElement('canvas');
+  canvas.width = 256;
+  canvas.height = 256;
+  const ctx = canvas.getContext('2d');
+  if (ctx) {
+    ctx.fillStyle = '#f0f0f0';
+    ctx.fillRect(0, 0, 256, 256);
+    ctx.fillStyle = '#333';
+    ctx.font = '16px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText(product.name, 128, 128);
+  }
+  const fallbackTexture = new THREE.Texture(canvas);
+  fallbackTexture.needsUpdate = true;
   
   // Get texture from cache or use a fallback
-  const texture = textureCache.get(product.image) || useTexture(product.image, {
-    onError: (e) => {
-      console.warn(`Failed to load texture for ${product.name}:`, e);
-      // Create a colored fallback texture instead of failing
-      const canvas = document.createElement('canvas');
-      canvas.width = 256;
-      canvas.height = 256;
-      const ctx = canvas.getContext('2d');
-      if (ctx) {
-        ctx.fillStyle = '#f0f0f0';
-        ctx.fillRect(0, 0, 256, 256);
-        ctx.fillStyle = '#333';
-        ctx.font = '16px Arial';
-        ctx.textAlign = 'center';
-        ctx.fillText(product.name, 128, 128);
-      }
-      const fallbackTexture = new THREE.Texture(canvas);
-      fallbackTexture.needsUpdate = true;
-      return fallbackTexture;
-    }
-  });
+  const texture = textureCache.get(product.image) || useTexture(product.image) || fallbackTexture;
   
   // Configure texture for better quality
   useEffect(() => {
@@ -328,14 +315,13 @@ const ProductNode = ({
       texture.minFilter = THREE.LinearFilter;
       texture.magFilter = THREE.LinearFilter;
       texture.needsUpdate = true;
-      texture.encoding = THREE.sRGBEncoding;
+      texture.colorSpace = THREE.SRGBColorSpace;
     }
   }, [texture]);
   
   // Animate on hover and click
-  useFrame((state, delta) => {
+  useFrame((state) => {
     if (meshRef.current) {
-      // Scale animation on hover
       meshRef.current.scale.x = THREE.MathUtils.lerp(
         meshRef.current.scale.x,
         isHovered || isClicked ? 1.2 : 1,
@@ -347,7 +333,6 @@ const ProductNode = ({
         0.1
       );
       
-      // Slight rotation for floating effect
       meshRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.5 + index) * 0.1;
       meshRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.3 + index) * 0.1;
     }

@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState } from 'react';
-import { motion, useScroll, useTransform, useSpring, useMotionValue, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion';
 import { Product } from '../data/products';
 import ProductCard from './ProductCard';
 import { ChevronDown } from 'lucide-react';
