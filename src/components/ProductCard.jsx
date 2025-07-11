@@ -44,17 +44,33 @@ const ProductCard = ({ product }) => {
         <div className="p-4 flex-1 flex flex-col justify-between">
           <div>
             <h3 className="text-lg font-medium mb-1">{product.name}</h3>
-            <p className="text-gray-700">{product.category.charAt(0).toUpperCase() + product.category.slice(1)}</p>
+            <p className="text-xl font-bold mb-2">${product.price.toLocaleString()}</p>
+            <p className="text-gray-600 text-sm mb-4 line-clamp-2">{product.description}</p>
+            
+            {product.features && (
+              <ul className="space-y-1 mb-4">
+                {product.features.slice(0, 4).map((feature, index) => (
+                  <li key={index} className="flex items-center text-sm text-gray-700">
+                    <span className="inline-block bg-black rounded-full w-1.5 h-1.5 mr-2"></span>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
-          <div className="mt-4 flex justify-between items-center">
-            <p className="text-lg font-bold">${product.price.toLocaleString()}</p>
+          
+          <div className="mt-4">
             <motion.button
-              className="bg-black text-white px-3 py-1 rounded text-sm"
+              className="w-full bg-black text-white py-2 px-4 rounded text-sm font-medium"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={handleAddToCart}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                window.location.href = `/product/${product.id}`;
+              }}
             >
-              Add to Cart
+              View Details
             </motion.button>
           </div>
           
