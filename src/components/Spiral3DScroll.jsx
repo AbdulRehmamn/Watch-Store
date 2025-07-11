@@ -2,21 +2,15 @@ import { useRef, useState, useEffect, useMemo, Suspense } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Text, Float, PerspectiveCamera, useTexture, Html } from '@react-three/drei';
-import { Product } from '../data/products';
 import * as THREE from 'three';
 import { Link } from 'react-router-dom';
 import { Loader, ShoppingBag } from 'lucide-react';
 import { useCart } from '../hooks/useCart';
 import ErrorBoundary from './ErrorBoundary';
 
-interface Spiral3DScrollProps {
-  title: string;
-  products: Product[];
-}
-
 // Main component
-const Spiral3DScroll = ({ title, products }: Spiral3DScrollProps) => {
-  const containerRef = useRef<HTMLDivElement>(null);
+const Spiral3DScroll = ({ title, products }) => {
+  const containerRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
   const { addToCart } = useCart();
   
@@ -122,14 +116,13 @@ const Spiral3DScroll = ({ title, products }: Spiral3DScrollProps) => {
 };
 
 // TextureLoader cache to prevent redundant loading
-const textureCache = new Map<string, THREE.Texture>();
+const textureCache = new Map();
 
-const Spiral = ({ products, scrollYProgress }: { products: Product[], scrollYProgress: any }) => {
-  const groupRef = useRef<THREE.Group>(null);
-  const [hovered, setHovered] = useState<number | null>(null);
-  const [clicked, setClicked] = useState<number | null>(null);
+const Spiral = ({ products, scrollYProgress }) => {
+  const groupRef = useRef(null);
+  const [hovered, setHovered] = useState(null);
+  const [clicked, setClicked] = useState(null);
   const [loading, setLoading] = useState(true);
-  const { } = useThree(); // Removed unused 'viewport'
   
   // Preload all textures in parallel to speed up rendering
   useEffect(() => {
@@ -162,7 +155,7 @@ const Spiral = ({ products, scrollYProgress }: { products: Product[], scrollYPro
               return Promise.resolve(textureCache.get(product.image));
             }
             
-            return new Promise<void>(resolve => {
+            return new Promise(resolve => {
               setTimeout(() => {
                 loader.load(
                   product.image,
@@ -230,7 +223,7 @@ const Spiral = ({ products, scrollYProgress }: { products: Product[], scrollYPro
       
       return {
         product,
-        position: [x, y, z] as [number, number, number],
+        position: [x, y, z],
         index: i
       };
     });
@@ -266,17 +259,6 @@ const Spiral = ({ products, scrollYProgress }: { products: Product[], scrollYPro
 };
 
 // Individual product node in the 3D space
-interface ProductNodeProps {
-  product: Product;
-  position: [number, number, number];
-  isHovered: boolean;
-  isClicked: boolean;
-  onHover: () => void;
-  onHoverEnd: () => void;
-  onClick: () => void;
-  index: number;
-}
-
 const ProductNode = ({ 
   product, 
   position, 
@@ -286,9 +268,8 @@ const ProductNode = ({
   onHoverEnd, 
   onClick,
   index
-}: ProductNodeProps) => {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const { } = useThree(); // Removed unused 'viewport'
+}) => {
+  const meshRef = useRef(null);
   
   // Create fallback texture
   const canvas = document.createElement('canvas');

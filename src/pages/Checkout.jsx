@@ -17,7 +17,7 @@ const Checkout = () => {
     navigate('/cart');
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setIsProcessing(true);
     

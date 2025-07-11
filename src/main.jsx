@@ -1,6 +1,6 @@
 import { StrictMode, Suspense } from 'react'
 import { createRoot } from 'react-dom/client'
-import App from './App.tsx'
+import App from './App.jsx'
 import './index.css'
 import { CartProvider } from './hooks/useCart'
 import ErrorBoundary from './components/ErrorBoundary'
@@ -16,7 +16,7 @@ const AppLoading = () => (
   </div>
 );
 
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ErrorBoundary>
       <CartProvider>

@@ -1,16 +1,10 @@
 import { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion';
-import { Product } from '../data/products';
 import ProductCard from './ProductCard';
 import { ChevronDown } from 'lucide-react';
 
-interface HorizontalScrollProps {
-  title: string;
-  products: Product[];
-}
-
-const HorizontalScroll = ({ title, products }: HorizontalScrollProps) => {
-  const containerRef = useRef<HTMLDivElement>(null);
+const HorizontalScroll = ({ title, products }) => {
+  const containerRef = useRef(null);
   const [containerWidth, setContainerWidth] = useState(0);
   const [windowWidth, setWindowWidth] = useState(0);
   const [isHorizontalScrollComplete, setIsHorizontalScrollComplete] = useState(false);
@@ -68,7 +62,7 @@ const HorizontalScroll = ({ title, products }: HorizontalScrollProps) => {
   useEffect(() => {
     if (!containerRef.current) return;
     
-    const handleWheel = (e: WheelEvent) => {
+    const handleWheel = (e) => {
       if (!isHorizontalScrollComplete && !manualScrolling) {
         // If horizontal scroll isn't complete, prevent default vertical scrolling
         // except when user is manually dragging

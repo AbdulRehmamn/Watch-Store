@@ -1,18 +1,8 @@
-import { Component, ErrorInfo, ReactNode } from 'react';
+import { Component } from 'react';
 import { Frown, RefreshCw } from 'lucide-react';
 
-interface Props {
-  children: ReactNode;
-  fallback?: ReactNode;
-}
-
-interface State {
-  hasError: boolean;
-  error: Error | null;
-}
-
-class ErrorBoundary extends Component<Props, State> {
-  constructor(props: Props) {
+class ErrorBoundary extends Component {
+  constructor(props) {
     super(props);
     this.state = { 
       hasError: false,
@@ -20,19 +10,19 @@ class ErrorBoundary extends Component<Props, State> {
     };
   }
 
-  static getDerivedStateFromError(error: Error): State {
+  static getDerivedStateFromError(error) {
     return { hasError: true, error };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+  componentDidCatch(error, errorInfo) {
     console.error("Component error:", error, errorInfo);
   }
 
-  handleRetry = (): void => {
+  handleRetry = () => {
     this.setState({ hasError: false, error: null });
   }
 
-  render(): ReactNode {
+  render() {
     if (this.state.hasError) {
       if (this.props.fallback) {
         return this.props.fallback;

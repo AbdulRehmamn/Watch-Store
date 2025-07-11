@@ -5,9 +5,9 @@ import ProductCard from '../components/ProductCard';
 import { useRef } from 'react';
 
 const CategoryPage = () => {
-  const { categoryType } = useParams<{ categoryType: string }>();
+  const { categoryType } = useParams();
   const products = getProductsByCategory(categoryType || '');
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef(null);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,

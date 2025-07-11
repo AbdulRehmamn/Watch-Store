@@ -232,14 +232,7 @@ const Home = () => {
   );
 };
 
-interface CategoryCardProps {
-  title: string;
-  image: string;
-  link: string;
-  delay: number;
-}
-
-const CategoryCard = ({ title, image, link, delay }: CategoryCardProps) => (
+const CategoryCard = ({ title, image, link, delay }) => (
   <motion.div
     initial={{ y: 50, opacity: 0 }}
     whileInView={{ y: 0, opacity: 1 }}
@@ -267,14 +260,7 @@ const CategoryCard = ({ title, image, link, delay }: CategoryCardProps) => (
   </motion.div>
 );
 
-interface CollectionCardProps {
-  title: string;
-  count: number;
-  image: string;
-  link: string;
-}
-
-const CollectionCard = ({ title, count, image, link }: CollectionCardProps) => (
+const CollectionCard = ({ title, count, image, link }) => (
   <motion.div
     initial={{ opacity: 0, scale: 0.9 }}
     whileInView={{ opacity: 1, scale: 1 }}

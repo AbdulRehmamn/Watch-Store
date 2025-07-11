@@ -2,12 +2,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 
-interface FeaturedWatchButtonProps {
-  productId: number;
-  name: string;
-}
-
-const FeaturedWatchButton = ({ productId, name }: FeaturedWatchButtonProps) => {
+const FeaturedWatchButton = ({ productId, name }) => {
   return (
     <Link to={`/product/${productId}`}>
       <motion.button

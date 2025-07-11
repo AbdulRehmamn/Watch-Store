@@ -1,34 +1,4 @@
-export interface Product {
-  id: number;
-  name: string;
-  category: 'men' | 'women' | 'limited';
-  price: number;
-  image: string;
-  description: string;
-  features?: string[];
-  detailedDescription?: string;
-  specifications?: {
-    movement?: string;
-    caseSize?: string;
-    caseThickness?: string;
-    dialColor?: string;
-    crystal?: string;
-    waterResistance?: string;
-    powerReserve?: string;
-    bandMaterial?: string;
-    buckleType?: string;
-  };
-  materials?: string[];
-  warranty?: string;
-  limitedEdition?: {
-    totalPieces: number;
-    individualNumbering: boolean;
-    certificate?: string;
-    specialPackaging?: string;
-  };
-}
-
-export const products: Product[] = [
+export const products = [
   {
     id: 1,
     name: "Chronograph Classic",
@@ -222,10 +192,10 @@ export const products: Product[] = [
   }
 ];
 
-export const getProductById = (id: number): Product | undefined => {
+export const getProductById = (id) => {
   return products.find(product => product.id === id);
 };
 
-export const getProductsByCategory = (category: string): Product[] => {
+export const getProductsByCategory = (category) => {
   return products.filter(product => product.category === category);
 };

@@ -6,13 +6,13 @@ import { useCart } from '../hooks/useCart';
 import { useState, useRef } from 'react';
 
 const ProductDetail = () => {
-  const { productId } = useParams<{ productId: string }>();
+  const { productId } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const [isAdded, setIsAdded] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
   const [isImageZoomed, setIsImageZoomed] = useState(false);
-  const imageRef = useRef<HTMLDivElement>(null);
+  const imageRef = useRef(null);
   
   const product = getProductById(parseInt(productId || '0'));
   

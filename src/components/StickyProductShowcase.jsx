@@ -1,14 +1,8 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { Product } from '../data/products';
 
-interface StickyProductShowcaseProps {
-  product: Product;
-  index: number;
-}
-
-const StickyProductShowcase = ({ product, index }: StickyProductShowcaseProps) => {
-  const ref = useRef<HTMLDivElement>(null);
+const StickyProductShowcase = ({ product, index }) => {
+  const ref = useRef(null);
   
   const { scrollYProgress } = useScroll({
     target: ref,
